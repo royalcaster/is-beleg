@@ -1,0 +1,84 @@
+Diese Datei wird ständig erweitert, zuletzt am
+Di 24. Dez 09:37:34 CET 2024 Hinweis auf 9. Praktikum
+Mo 23. Dez 23:00:07 CET 2024 Hinweis Folie Verify
+Mo 23. Dez 19:37:48 CET 2024 (erstellt)
+
+SICHERHEITSHINWEIS
+
+Verschieben Sie die .tar-Datei am besten in das Verzeichnis mit
+dem bereitgestellten C-Quelltext. Dann können Sie später nicht
+versehentlich Ihren Quelltext überschreiben, wenn Sie erneut aus der
+.tar-Datei extrahieren.
+
+Etwa so erzeugt ein Nutzer s85555 das Verzeichnis s85555 und
+verschiebt die .tar-Datei dort hin:
+tar xf s85555.tar
+mv s85555.tar s85555
+
+Alternativ kann Nutzer s85555 das Verzeichnis s85555 nach der
+Extraktion umbenennen:
+tar xf s85555.tar
+mv s85555 pvl
+
+Hintergrund: Die .tar-Datei enthält bereits einen C-Quelltext.
+Die .tar-Datei erzeugt bei der Extraktion ein Unterverzeichnis,
+so dass nie in das Verzeichnis mit der .tar-Datei ausgepackt
+wird. Regelmäßige Backups können zusätzlich für Sicherheit
+sorgen.
+
+HINWEISE ZUR ERZEUGUNG DES PROGRAMMS
+
+Unter den bereitgestellten Dateien finden sich insbesondere ein
+individualisiertes Makefile und ein kurzer Quelltext unter dem
+gewünschte Programmnamen.
+               
+Passen Sie bitte ggf. das Makefile an, überprüfen Sie
+insbesondere, ob der Pfad zu Ihrem openssl-3.x.x-Verzeichnis
+korrekt ist.
+
+Die Funktionen zur Entschlüsselung und Verschlüsselung hatten
+wir in der Vorlesung besprochen (vgl. Folien 163 und 165). Die
+Funktionen, mit denen Sie eine Signatur prüfen können, sind auf
+Folie 164 beschrieben. Bereits im 9. Praktikum haben Sie einen
+öffentlichen Testschlüssel mit der Funktion PEM_read_PUBKEY
+eingelesen. Den Schlüssel übergeben Sie als letzten Parameter
+der Funktion EVP_VerifyFinal.
+
+Erzeugen und Ausführen
+
+Sie können Ihr Programm so übersetzen:
+	make
+
+So führen Sie es so aus:
+	make run
+
+Unter macOS übersetzen Sie ihr Programm so:
+	make macos
+
+Sie können bei Bedarf ERR_print_errors_fp(stderr) aufrufen, um
+sich Fehlermeldungen anzeigen zu lassen. Zu Beginn sollten Sie
+dann ERR_load_crypto_strings() aufrufen, damit die Meldungen
+nicht nur numerisch angezeigt werden.
+Ebenfalls nötig: #include <openssl/err.h>
+
+HILFE ZUR AUFGABENSTELLUNG
+
+Ihr C-Programm soll zwei Varianten entschlüsseln und die zur
+Signatur passende Variante an bestimmten Stellen ändern, die
+geänderten Daten verschlüsseln und das Chiffrat in eine Datei
+speichern.
+
+FRAGEN UND ANTWORTEN
+
+Fragen beantworte ich gern per E-Mail, z. B. ...
+
+Ich habe SSLDIR im Makefile richtig gesetzt. Dennoch fehlen
+bei der Übersetzung viele Symbole. Können Sie mir weiterhelfen?
+
+[Die Frage ist obsolet, da seit diesem Jahr das im folgenden
+erwähnte "make s85555" ebenfalls funktionieren würde. Die Frage
+wäre also gar nicht gestellt worden. Sie dient hier nur als
+Platzhalter.]
+Sie haben bei der Übersetzung Ihre S-Nummer angegeben
+(make s85555). Für dieses Ziel gibt es im Makefile keine Regel.
+Lassen Sie den Parameter einfach weg.
