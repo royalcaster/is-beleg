@@ -36,6 +36,7 @@ int decrypt_camellia(const char *cipher_file, const char *key_file, const char *
 	fseek(cipher_fp, 0, SEEK_END);
 	cipher_len = ftell(cipher_fp);
 	fseek(cipher_fp, 0, SEEK_SET);
+	printf("Cipher length: %ld\n", cipher_len);
 
 	/* Allocate memory for the cipher text */
 	cipher_text = malloc(cipher_len);
@@ -78,11 +79,15 @@ int decrypt_camellia(const char *cipher_file, const char *key_file, const char *
 	/* Decrypt the data */
 	if (EVP_DecryptUpdate(ctx, plain_text, &len, cipher_text, cipher_len) != 1)
 		handle_errors();
+	printf("DecryptUpdate - len: %d\n", len);
 	plain_len = len;
 
 	if (EVP_DecryptFinal_ex(ctx, plain_text + len, &len) != 1)
 		handle_errors();
+	printf("DecryptFinal - len: %d\n", len);
 	plain_len += len;
+
+	printf("Plain length: %d\n", plain_len);
 
 	/* Write the decrypted data to the output file */
 	fwrite(plain_text, 1, plain_len, output_fp);
@@ -119,6 +124,7 @@ int verify_signature(const char *data_file, const char *sig_file, const char *pu
 	fseek(data_fp, 0, SEEK_END);
 	data_len = ftell(data_fp);
 	fseek(data_fp, 0, SEEK_SET);
+	printf("Data length: %ld\n", data_len);
 
 	/* Allocate memory for data */
 	data = malloc(data_len);
@@ -136,6 +142,7 @@ int verify_signature(const char *data_file, const char *sig_file, const char *pu
 	fseek(sig_fp, 0, SEEK_END);
 	sig_len = ftell(sig_fp);
 	fseek(sig_fp, 0, SEEK_SET);
+	printf("Signature length: %ld\n", sig_len);
 
 	/* Allocate memory for signature */
 	sig = malloc(sig_len);
@@ -201,6 +208,7 @@ void adjust_festive_text(const char *input_file, const char *output_file)
 	fseek(input_fp, 0, SEEK_END);
 	file_len = ftell(input_fp);
 	fseek(input_fp, 0, SEEK_SET);
+	printf("Input file length: %ld\n", file_len);
 
 	/* Allocate memory for data */
 	data = malloc(file_len);
@@ -253,6 +261,7 @@ int encrypt_aes_ofb(const char *input_file, const char *key_file, const char *ou
 	fseek(input_fp, 0, SEEK_END);
 	input_len = ftell(input_fp);
 	fseek(input_fp, 0, SEEK_SET);
+	printf("Input length: %ld\n", input_len);
 
 	/* Allocate memory for input data */
 	input_data = malloc(input_len);
@@ -293,14 +302,17 @@ int encrypt_aes_ofb(const char *input_file, const char *key_file, const char *ou
 	/* Encrypt the data */
 	if (EVP_EncryptUpdate(ctx, cipher_data, &len, input_data, input_len) != 1)
 		handle_errors();
+	printf("EncryptUpdate - len: %d\n", len);
 	cipher_len = len;
 
 	if (EVP_EncryptFinal_ex(ctx, cipher_data + len, &len) != 1)
 		handle_errors();
+	printf("EncryptFinal - len: %d\n", len);
 	cipher_len += len;
 
 	/* Write encrypted data */
 	fwrite(cipher_data, 1, cipher_len, output_fp);
+	printf("Cipher length written: %d\n", cipher_len);
 
 	/* Clean up */
 	free(input_data);
